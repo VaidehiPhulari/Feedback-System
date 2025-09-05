@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Feedback Collection System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #0072ff;
+            border-bottom: 3px solid #0072ff;
+        }
+
+        .tab-content {
+            padding: 40px;
+            min-height: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0072ff;
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .rating-option:hover {
+            border-color: #0072ff;
+            transform: translateY(-2px);
+        }
+
+        .rating-option.selected {
+            border-color: #0072ff;
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: white;
+        }
+
+        .stars {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .feedback-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .feedback-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #0072ff;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .feedback-meta {
+            display: flex;
+            gap: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .star {
+            color: #ffc107;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .analytics-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .analytics-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-bar {
+            margin-bottom: 25px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #d1edff;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .rating-container {
+                flex-direction: column;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                📋 Feedback Collection System
+            </h1>
+            <p>Streamlined feedback management for educational excellence</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('submit')">Submit Feedback</button>
+            <button class="nav-tab" onclick="showTab('view')">View Feedback</button>
+            <button class="nav-tab" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- Submit Feedback Tab -->
+        <div id="submitTab" class="tab-content">
+            <h2>Submit Your Feedback</h2>
+            <div id="submitMessage"></div>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="feedbackType">Feedback Type</label>
+                    <select id="feedbackType" name="feedback_type" required>
+                        <option value="">Select feedback type</option>
+                        <option value="General">General</option>
+                        <option value="Course Content">Course Content</option>
+                        <option value="Teaching">Teaching</option>
+                        <option value="Infrastructure">Infrastructure</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject/Course</label>
+                    <input type="text" id="subject" name="subject_course" placeholder="e.g., Computer Science, Mathematics">
+                </div>
+
+                <div class="form-group">
+                    <label>Overall Rating</label>
+                    <div class="rating-container">
+                        <div class="rating-option" data-rating="1">
+                            <div class="stars">⭐</div>
+                            <div>Poor</div>
+                        </div>
+                        <div class="rating-option" data-rating="2">
+                            <div class="stars">⭐⭐</div>
+                            <div>Fair</div>
+                        </div>
+                        <div class="rating-option" data-rating="3">
+                            <div class="stars">⭐⭐⭐</div>
+                            <div>Good</div>
+                        </div>
+                        <div class="rating-option" data-rating="4">
+                            <div class="stars">⭐⭐⭐⭐</div>
+                            <div>Very Good</div>
+                        </div>
+                        <div class="rating-option" data-rating="5">
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                            <div>Excellent</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="rating" name="overall_rating" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="detailedFeedback">Detailed Feedback</label>
+                    <textarea id="detailedFeedback" name="detailed_feedback" rows="5" placeholder="Please provide your detailed feedback here..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!-- View Feedback Tab -->
+        <div id="viewTab" class="tab-content hidden">
+            <h2>All Feedback Submissions</h2>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search feedback by content, name, or subject..." onkeyup="searchFeedback()">
+            </div>
+            
+            <div class="filters">
+                <select id="typeFilter" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Types</option>
+                    <option value="General">General</option>
+                    <option value="Course Content">Course Content</option>
+                    <option value="Teaching">Teaching</option>
+                    <option value="Infrastructure">Infrastructure</option>
+                    <option value="Other">Other</option>
+                </select>
+                
+                <select id="ratingFilter" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+                
+                <button class="filter-select" onclick="loadFeedback()" style="background: #0072ff; color: white; border: none; cursor: pointer;">Refresh</button>
+            </div>
+            
+            <div id="feedbackMessage"></div>
+            <div id="feedbackList" class="feedback-list"></div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analyticsTab" class="tab-content hidden">
+            <h2>Feedback Analytics</h2>
+            <div id="analyticsMessage"></div>
+            
+            <div class="analytics-grid" id="analyticsGrid">
+                <!-- Analytics cards will be populated here -->
+            </div>
+            
+            <div id="detailedAnalytics">
+                <!-- Detailed analytics will be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        const API_BASE_URL = 'http://localhost:3000/api';
+        let currentTab = 'submit';
+        let selectedRating = null;
+        let allFeedback = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadFeedback();
+            loadAnalytics();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Rating selection
+            document.querySelectorAll('.rating-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedRating = this.dataset.rating;
+                    document.getElementById('rating').value = selectedRating;
+                });
+            });
+
+            // Form submission
+            document.getElementById('feedbackForm').addEventListener('submit', submitFeedback);
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            event.target.classList.add('active');
+            currentTab = tabName;
+
+            // Load data for the tab
+            if (tabName === 'view') {
+                loadFeedback();
+            } else if (tabName === 'analytics') {
+                loadAnalytics();
+            }
+        }
+
+        // Submit feedback
+        async function submitFeedback(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('submitMessage');
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+                
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                data.overall_rating = parseInt(data.overall_rating);
+
+                const response = await fetch(`${API_BASE_URL}/feedback`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    messageDiv.innerHTML = '<div class="success">✅ Feedback submitted successfully!</div>';
+                    document.getElementById('feedbackForm').reset();
+                    document.querySelectorAll('.rating-option').forEach(opt => opt.classList.remove('selected'));
+                    selectedRating = null;
+                    
+                    // Refresh analytics if on analytics tab
+                    if (currentTab === 'analytics') {
+                        loadAnalytics();
+                    }
+                } else {
+                    throw new Error(result.error || 'Failed to submit feedback');
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Feedback';
+            }
+        }
+
+        // Load all feedback
+        async function loadFeedback() {
+            const messageDiv = document.getElementById('feedbackMessage');
+            const listDiv = document.getElementById('feedbackList');
+            
+            try {
+                listDiv.innerHTML = '<div class="loading">Loading feedback...</div>';
+                
+                const response = await fetch(`${API_BASE_URL}/feedback?limit=100`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    allFeedback = data.feedback;
+                    displayFeedback(allFeedback);
+                    messageDiv.innerHTML = '';
+                } else {
+                    throw new Error(data.error || 'Failed to load feedback');
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">❌ Error loading feedback: ${error.message}</div>`;
+                listDiv.innerHTML = '';
+            }
+        }
+
+        // Display feedback
+        function displayFeedback(feedbackArray) {
+            const listDiv = document.getElementById('feedbackList');
+            
+            if (feedbackArray.length === 0) {
+                listDiv.innerHTML = '<div class="loading">No feedback found.</div>';
+                return;
+            }
+
+            const feedbackHTML = feedbackArray.map(feedback => `
+                <div class="feedback-item">
+                    <div class="feedback-header">
+                        <h3>${escapeHtml(feedback.feedback_type)}</h3>
+                        <div class="rating-display">
+                            <span class="star">⭐</span>
+                            <span>${feedback.overall_rating}/5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-meta">
+                        <span><strong>Name:</strong> ${escapeHtml(feedback.name)}</span>
+                        <span><strong>Email:</strong> ${escapeHtml(feedback.email)}</span>
+                        <span><strong>Date:</strong> ${new Date(feedback.submission_date).toLocaleDateString()}</span>
+                    </div>
+                    
+                    ${feedback.subject_course ? `<div style="margin: 10px 0;"><strong>Subject:</strong> ${escapeHtml(feedback.subject_course)}</div>` : ''}
+                    
+                    ${feedback.detailed_feedback ? `
+                        <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px;">
+                            <strong>Feedback:</strong><br>
+                            ${escapeHtml(feedback.detailed_feedback)}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            listDiv.innerHTML = feedbackHTML;
+        }
+
+        // Load analytics
+        async function loadAnalytics() {
+            const messageDiv = document.getElementById('analyticsMessage');
+            const gridDiv = document.getElementById('analyticsGrid');
+            const detailedDiv = document.getElementById('detailedAnalytics');
+            
+            try {
+                gridDiv.innerHTML = '<div class="loading">Loading analytics...</div>';
+                
+                const response = await fetch(`${API_BASE_URL}/analytics`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayAnalytics(data);
+                    messageDiv.innerHTML = '';
+                } else {
+                    throw new Error(data.error || 'Failed to load analytics');
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">❌ Error loading analytics: ${error.message}</div>`;
+                gridDiv.innerHTML = '';
+            }
+        }
+
+        // Display analytics
+        function displayAnalytics(data) {
+            const gridDiv = document.getElementById('analyticsGrid');
+            const detailedDiv = document.getElementById('detailedAnalytics');
+            
+            // Main analytics cards
+            gridDiv.innerHTML = `
+                <div class="analytics-card">
+                    <div class="analytics-number">${data.total_feedback}</div>
+                    <div class="analytics-label">Total Feedback</div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="analytics-number">${data.average_rating}</div>
+                    <div class="analytics-label">Average Rating</div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="analytics-number">${data.recent_feedback}</div>
+                    <div class="analytics-label">This Week</div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="analytics-number">${data.rating_distribution.filter(r => r.overall_rating === 5)[0]?.count || 0}</div>
+                    <div class="analytics-label">Excellent Ratings</div>
+                </div>
+            `;
+
+            // Detailed analytics
+            let detailedHTML = '<h3>Feedback by Type</h3><div class="feedback-list">';
+            
+            data.feedback_by_type.forEach(type => {
+                detailedHTML += `
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <h4>${type.feedback_type}</h4>
+                            <div class="rating-display">
+                                <span class="star">⭐</span>
+                                <span>${parseFloat(type.avg_rating || 0).toFixed(1)}/5</span>
+                            </div>
+                        </div>
+                        <p><strong>Total submissions:</strong> ${type.count}</p>
+                    </div>
+                `;
+            });
+            
+            detailedHTML += '</div>';
+            
+            if (data.rating_distribution.length > 0) {
+                detailedHTML += '<h3>Rating Distribution</h3><div class="feedback-list">';
+                data.rating_distribution.forEach(rating => {
+                    const percentage = ((rating.count / data.total_feedback) * 100).toFixed(1);
+                    detailedHTML += `
+                        <div class="feedback-item">
+                            <div class="feedback-header">
+                                <h4>${rating.overall_rating} Star${rating.overall_rating > 1 ? 's' : ''}</h4>
+                                <span>${percentage}%</span>
+                            </div>
+                            <p><strong>Count:</strong> ${rating.count} submissions</p>
+                        </div>
+                    `;
+                });
+                detailedHTML += '</div>';
+            }
+            
+            detailedDiv.innerHTML = detailedHTML;
+        }
+
+        // Search functionality
+        function searchFeedback() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredFeedback = allFeedback.filter(feedback => 
+                feedback.name.toLowerCase().includes(searchTerm) ||
+                feedback.detailed_feedback?.toLowerCase().includes(searchTerm) ||
+                feedback.subject_course?.toLowerCase().includes(searchTerm) ||
+                feedback.feedback_type.toLowerCase().includes(searchTerm)
+            );
+            displayFeedback(filteredFeedback);
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            
+            let filteredFeedback = [...allFeedback];
+            
+            if (typeFilter) {
+                filteredFeedback = filteredFeedback.filter(f => f.feedback_type === typeFilter);
+            }
+            
+            if (ratingFilter) {
+                filteredFeedback = filteredFeedback.filter(f => f.overall_rating === parseInt(ratingFilter));
+            }
+            
+            displayFeedback(filteredFeedback);
+        }
+
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-refresh data every 30 seconds when viewing feedback or analytics
+        setInterval(() => {
+            if (currentTab === 'view') {
+                loadFeedback();
+            } else if (currentTab === 'analytics') {
+                loadAnalytics();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
